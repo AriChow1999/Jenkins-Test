@@ -1,2 +1,2 @@
-const A="Hello";
-console.log(A);
+const B="Hello";
+console.log(B);
