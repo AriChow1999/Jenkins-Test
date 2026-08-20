@@ -11,27 +11,33 @@ jobs:
     runs-on: self-hosted # Executes on your machine (192.168.29.9)
 
     steps:
-      - name: SSH and Pull on Target Server
+      - name: SSH and Pull on Target CentOS Server
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: '192.168.29.171'               # Your target server IP address
+          host: '192.168.29.171'               # Your target CentOS server IP address
           username: 'arijit'                   # Target server Linux username
-          key: ${{ secrets.CENTOS_SSH_KEY }}    # <-- Swapped from password to your SSH Key secret!
-          port: 22                             # Default local SSH port
-          script_stop: true
+          key: ${{ secrets.CENTOS_SSH_KEY }}   # Securely reads your matching CentOS Private Key
+          port: 22                             # Default local SSH port (No ngrok required!)
+          script_stop: true                    # Fixed hyphen syntax parameter
           
           script: |
             set -e
+            
             APP_DIR="/home/arijit/server-files"
             REPO_URL="git@github.com:AriChow1999/Jenkins-Test.git"
             
-            echo "Connected securely using your local machine's key string!"
+            echo "Connected from 192.168.29.9 to CentOS 192.168.29.171 successfully!"
             
+            # Checks if the repository is already cloned. If not, it clones it fresh.
             if [ -d "$APP_DIR/.git" ]; then
+              echo "Directory exists on server. Pulling newest changes..."
               cd "$APP_DIR"
               git pull origin main
             else
+              echo "Directory missing on server. Running a clean clone..."
               mkdir -p "$APP_DIR"
               git clone -b main "$REPO_URL" "$APP_DIR"
             fi
+            
+            echo "Deployment on CentOS 192.168.29.171 completed successfully!"
 
