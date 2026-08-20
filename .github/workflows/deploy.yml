@@ -1,0 +1,37 @@
+name: Local Network Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  network-deploy:
+    name: Connect Across Local Network
+    runs-on: self-hosted # Executes on your machine (192.168.29.9)
+
+    steps:
+      - name: SSH and Pull on Target Server
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: '192.168.29.171'               # Your target server IP address
+          username: 'arijit'                   # Target server Linux username
+          key: ${{ secrets.CENTOS_SSH_KEY }}    # <-- Swapped from password to your SSH Key secret!
+          port: 22                             # Default local SSH port
+          script_stop: true
+          
+          script: |
+            set -e
+            APP_DIR="/home/arijit/server-files"
+            REPO_URL="git@github.com:AriChow1999/Jenkins-Test.git"
+            
+            echo "Connected securely using your local machine's key string!"
+            
+            if [ -d "$APP_DIR/.git" ]; then
+              cd "$APP_DIR"
+              git pull origin main
+            else
+              mkdir -p "$APP_DIR"
+              git clone -b main "$REPO_URL" "$APP_DIR"
+            fi
+
