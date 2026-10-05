@@ -1,2 +1,2 @@
-const B="Hello1";
+const B="Hello2";
 console.log(B);
