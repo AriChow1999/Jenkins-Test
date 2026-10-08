@@ -23,13 +23,13 @@ jobs:
           script: |
             set -e
             
-            APP_DIR="/home/arijit/server-files"
+            APP_DIR="/home/arijit/server-files/Jenkins-Test"
             REPO_URL="git@github.com:AriChow1999/Jenkins-Test.git"
             
             echo "Connected from 192.168.29.9 to CentOS 192.168.29.171 successfully!"
             
             # Checks if the repository is already cloned. If not, it clones it fresh.
-            if [ -d "$APP_DIR/.git" ]; then
+            if [ -d "$APP_DIR" ]; then
               echo "Directory exists on server. Pulling newest changes..."
               cd "$APP_DIR"
               git pull origin main
