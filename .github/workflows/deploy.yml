@@ -36,7 +36,8 @@ jobs:
             else
               echo "Directory missing on server. Running a clean clone..."
               mkdir -p "$APP_DIR"
-              git clone -b main "$REPO_URL" "$APP_DIR"
+              cd "$APP_DIR"
+              git clone "$REPO_URL"
             fi
             
             echo "Deployment on CentOS 192.168.29.171 completed successfully!"
